@@ -39,6 +39,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         System.out.println("Processing request: " + requestURI);
         System.out.println("Incoming token: " + request.getHeader("Authorization"));
 
+        if (requestURI.startsWith("/actuator")) {
+            System.out.println("Skipping prometheus authentication for: " + requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (requestURI.startsWith("/api/auth/")) {
             System.out.println("Skipping authentication for: " + requestURI);
             filterChain.doFilter(request, response);
