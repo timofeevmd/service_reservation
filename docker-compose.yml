@@ -1,5 +1,10 @@
 version: '3.8'
 
+networks:
+    monitor:
+        driver: bridge
+        name: service_reservation_monitor
+
 services:
   database:
     image: postgres:latest
@@ -19,6 +24,8 @@ services:
       interval: 10s
       retries: 5
     command: ["postgres", "-c", "log_statement=all"]
+    networks:
+      - monitor
 
   backend:
     image: michaelt1223/perf_sr_backend:latest
@@ -61,6 +68,8 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    networks:
+      - monitor
 
   frontend:
     image: michaelt1223/perf_sr_frontend:latest
@@ -70,6 +79,64 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    networks:
+      - monitor
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    hostname: prometheus
+    restart: always
+    volumes:
+      - ${VOLUMES_CONFIG}prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${VOLUMES_CONFIG}node_down.yml:/etc/prometheus/node_down.yml:ro
+    ports:
+      - "9091:9090"
+    networks:
+      - monitor
+
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    hostname: node-exporter
+    restart: always
+    ports:
+      - "9100:9100"
+    networks:
+      - monitor
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    hostname: cadvisor
+    restart: always
+    command: --port=8081
+    volumes:
+      - /:/rootfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    cgroup_parent: system.slice
+    ports:
+      - "8081:8081"
+    networks:
+      - monitor
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SERVER_DOMAIN=localhost:3001
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3001/
+      - GF_LOG_FILTERS="debug"
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    networks:
+      - monitor
 
 volumes:
   db_data:
