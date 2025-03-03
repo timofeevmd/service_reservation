@@ -1,0 +1,4 @@
+CREATE USER test_user WITH ENCRYPTED PASSWORD 'qwe123';
+ALTER USER test_user WITH SUPERUSER;
+GRANT ALL ON SCHEMA public TO test_user;
+GRANT CREATE ON SCHEMA public TO test_user;
