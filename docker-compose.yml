@@ -10,6 +10,14 @@ services:
     image: postgres:latest
     container_name: database
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: "1g"
+        reservations:
+          cpus: "0.1"
+          memory: "512m"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
@@ -31,6 +39,15 @@ services:
     image: michaelt1223/perf_sr_backend:latest
     container_name: backend
     restart: always
+    platform: ${PLATFORM}
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1g"
+        reservations:
+          cpus: "0.2"
+          memory: "512m"
     environment:
       SERVER_PORT: 8080
       SPRING_FLYWAY_ENABLED: "true"
@@ -60,7 +77,7 @@ services:
       LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL_BASICBINDER: INFO
       LOGGING_FILE_NAME: logs/application.log
       LOGGING_FILE_MAX_SIZE: 10MB
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_CLIENT_RESTTEMPLATE: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_CLIENT_RESTTEMPLATE: INFO
       MANAGEMENT_ENDPOINT_LOGGERS_ENABLED: "true"
       MANAGEMENT_ENDPOINT_METRICS_ENABLED: "true"
     ports:
@@ -75,6 +92,15 @@ services:
     image: michaelt1223/perf_sr_frontend:latest
     container_name: frontend
     restart: always
+    platform: ${PLATFORM}
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: "512g"
+        reservations:
+          cpus: "0.2"
+          memory: "256m"
     ports:
       - "3000:3000"
     depends_on:
@@ -87,6 +113,14 @@ services:
     container_name: prometheus
     hostname: prometheus
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.7"
+          memory: "1g"
+        reservations:
+          cpus: "0.4"
+          memory: "512m"
     volumes:
       - ${VOLUMES_CONFIG}prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ${VOLUMES_CONFIG}node_down.yml:/etc/prometheus/node_down.yml:ro
@@ -100,6 +134,14 @@ services:
     container_name: node_exporter
     hostname: node-exporter
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "256m"
+        reservations:
+          cpus: "0.1"
+          memory: "128m"
     ports:
       - "9100:9100"
     networks:
@@ -111,6 +153,14 @@ services:
     hostname: cadvisor
     restart: always
     command: --port=8081
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "256m"
+        reservations:
+          cpus: "0.1"
+          memory: "128m"
     volumes:
       - /:/rootfs:ro
       - /var/run/docker.sock:/var/run/docker.sock:rw
@@ -127,14 +177,22 @@ services:
     container_name: grafana
     hostname: grafana
     restart: always
-    ports:
-      - "3001:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.7"
+          memory: "512m"
+        reservations:
+          cpus: "0.4"
+          memory: "256m"
     environment:
       - GF_SERVER_DOMAIN=localhost:3001
       - GF_RENDERING_CALLBACK_URL=http://grafana:3001/
       - GF_LOG_FILTERS="debug"
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    ports:
+      - "3001:3000"
     networks:
       - monitor
 
