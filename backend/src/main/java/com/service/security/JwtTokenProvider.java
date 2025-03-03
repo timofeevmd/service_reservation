@@ -41,11 +41,6 @@ public class JwtTokenProvider {
         Date now = new Date(System.currentTimeMillis());
         Date expiryDate = new Date(System.currentTimeMillis() + jwtExpirationMs);
 
-        System.out.println("now: " + now);
-        System.out.println("expiryDate: " + expiryDate);
-        System.out.println("userDetails.getUsername(): " + userDetails.getUsername());
-        System.out.println(authentication);
-
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(now)
@@ -101,7 +96,6 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            System.err.println("Ошибка проверки JWT: " + e.getMessage());
             return false;
         }
     }

@@ -1,6 +1,8 @@
 package com.service.database;
 
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -9,9 +11,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
+
 @Component
 public class DatabaseSeeder {
 
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
     private final JdbcTemplate jdbcTemplate;
     private final BCryptPasswordEncoder passwordEncoder;
     private final Random random = new Random();
@@ -28,7 +32,7 @@ public class DatabaseSeeder {
         seedHotelRooms();
         seedCarReservations();
         seedRoomReservations();
-        System.out.println("Sample data inserted successfully.");
+        logger.info("Sample data inserted successfully.");
     }
 
     private void seedUsers() {
@@ -44,12 +48,12 @@ public class DatabaseSeeder {
 
                 writer.append(username).append(",").append(rawPassword).append("\n");
             }
-            System.out.println("Passwords saved to users_passwords.csv");
+            logger.info("Passwords saved to users_passwords.csv");
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());
             throw new RuntimeException(e);
         }
-        System.out.println("100 users inserted with hashed passwords.");
+        logger.info("100 users inserted with hashed passwords.");
     }
 
     private void seedCars() {
@@ -61,7 +65,7 @@ public class DatabaseSeeder {
             jdbcTemplate.update("INSERT INTO cars (model, registration_number, available, created_at) VALUES (?, ?, ?, NOW()) ON CONFLICT (registration_number) DO NOTHING",
                     model, registrationNumber, available);
         }
-        System.out.println("50 cars inserted.");
+        logger.info("50 cars inserted.");
     }
 
     private void seedHotelRooms() {
@@ -71,7 +75,7 @@ public class DatabaseSeeder {
             jdbcTemplate.update("INSERT INTO hotel_rooms (room_number, capacity, available, created_at) VALUES (?, ?, ?, NOW()) ON CONFLICT (room_number) DO NOTHING",
                     i, capacity, true);
         }
-        System.out.println("80 hotel rooms inserted.");
+        logger.info("80 hotel rooms inserted.");
     }
 
     private void seedCarReservations() {
@@ -85,7 +89,7 @@ public class DatabaseSeeder {
             jdbcTemplate.update("INSERT INTO reservations (user_id, type, item_id, start_date, end_date, status, duration, created_at) VALUES (?, ?, ?, CURRENT_DATE + ?, CURRENT_DATE + ?, ?, ?, NOW()) ON CONFLICT DO NOTHING",
                     userId, "CAR", carId, startDateOffset, endDateOffset, status, endDateOffset - startDateOffset);
         }
-        System.out.println("500 car reservations inserted.");
+        logger.info("500 car reservations inserted.");
     }
 
     private void seedRoomReservations() {
@@ -99,7 +103,7 @@ public class DatabaseSeeder {
             jdbcTemplate.update("INSERT INTO reservations (user_id, type, item_id, start_date, end_date, status, duration, created_at) VALUES (?, ?, ?, CURRENT_DATE + ?, CURRENT_DATE + ?, ?, ?, NOW()) ON CONFLICT DO NOTHING",
                     userId, "ROOM", roomId, startDateOffset, endDateOffset, status, endDateOffset - startDateOffset);
         }
-        System.out.println("500 room reservations inserted.");
+        logger.info("500 room reservations inserted.");
     }
 
     private int getRandomUserId() {

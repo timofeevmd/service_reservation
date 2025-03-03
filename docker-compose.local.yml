@@ -21,7 +21,9 @@ services:
     command: ["postgres", "-c", "log_statement=all"]
 
   backend:
-    image: michaelt1223/perf_sr_backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: backend
     restart: always
     environment:
@@ -63,7 +65,9 @@ services:
         condition: service_healthy
 
   frontend:
-    image: michaelt1223/perf_sr_frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: frontend
     restart: always
     ports:
