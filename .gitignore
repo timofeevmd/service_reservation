@@ -28,3 +28,4 @@ replay_pid*
 /frontend/node_modules/
 /frontend/package-lock.json
 /backend/target/
+/var/

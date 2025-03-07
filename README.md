@@ -1,31 +1,81 @@
 # service_reservation
 this project was build for performance testing courses.  don't judge strictly
 
+1. java-17
+2. maven
+3. docker
+4. jmeter5_4_1
 
 install infra
+1. ### java-17
+   1. #### **macOs**
+      - `brew install openjdk@17`
+   2. #### **linux**
+      - [manual](https://www.digitalocean.com/community/tutorials/how-to-install-java-on-centos-and-fedora) 
+      - if manual is not work
+      - `wget https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9/OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz`
+      - if wget is not work try to download [openjdk-17-...](https://adoptium.net/temurin/releases/?arch=x64&os=linux&package=jdk&version=17)
+      ```bash
+        sudo mkdir -p /opt/java
+        cd /opt/java
+        sudo tar -xvzf ~/OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz
+        sudo mv jdk-17.0.9+9 java-17
+        sudo vim /etc/profile.d/java.sh
+        ```
+      - set of them
+      ```bash
+        export JAVA_HOME=/opt/java/java-17
+        export PATH=$JAVA_HOME/bin:$PATH
+        ```
+      - `source /etc/profile.d/java.sh`
+   3. #### **windows**
+      - download [.zip](https://adoptium.net/temurin/releases/?arch=x64&os=windows&package=jdk&version=17)
+      - Follow the installation wizard, keeping the default settings.
+      - Note the installation path (usually C:\Program Files\Eclipse Adoptium\jdk-17 or C:\Program Files\Java\jdk-17).
+      - Open Control Panel → System → Advanced system settings.
+      - Go to the Advanced tab and click Environment Variables.
+      - Under System Variables
+      - Find the `JAVA_HOME` variable (if it does not exist, click New)
+      - Set `JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17`
+      - Find Path → click Edit → New
+      - Set `%JAVA_HOME%\bin`
+2. ### maven
+   1. [manual](https://www.baeldung.com/install-maven-on-windows-linux-mac#bd-installing-maven-on-mac-os-x) for macOs/linux/windows
+3. ### docker
+   1. [manual](https://docs.docker.com/desktop/) for macOs/linux/windows
 
-for linux
-https://docs.docker.com/engine/install/centos/#install-using-the-repository
+   troubleshooting
+      - Error permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.48/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
 
-CentOS/RHEL
-
-```bash
-sudo dnf -y install dnf-plugins-core &&
-sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo &&
-sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin &&
-sudo systemctl enable --now docker
-```
-
-notes
-Error permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.48/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
-
-```bash
-sudo groupadd docker &&
-sudo usermod -aG docker $USER &&
-newgrp docker &&
-reboot
-```
-
+      ```bash
+      sudo groupadd docker &&
+      sudo usermod -aG docker $USER &&
+      newgrp docker &&
+      reboot
+      ```
+4. ### jmeter 5.4.1
+   1. macOs
+      ```bash
+      mkdir ~/tools/ &&
+      cd ~/tools/ &&
+      curl -O https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.1.tgz &&
+      tar -xvzf apache-jmeter-5.4.1.tgz &&
+      cd ./apache-jmeter-5.4.1/bin/ &&
+      ./jmeter
+      ```
+   2. linux
+      ```bash
+      mkdir ~/tools/ &&
+      cd ~/tools/ &&
+      wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.1.tgz &&
+      tar -xvzf apache-jmeter-5.4.1.tgz &&
+      cd ./apache-jmeter-5.4.1/bin/ &&
+      ./jmeter
+      ```
+   3. windows
+      - downloads [.zip](https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.1.zip)
+      - unzip .zpi arch
+      - run 
 
 into Grafana
 
