@@ -1,13 +1,21 @@
 # service_reservation
 this project was build for performance testing courses.  don't judge strictly
 
-1. java-17
-2. maven
-3. docker
-4. jmeter5_4_1
+#### [infrastructure](#install-infrastructure)
+1. [java-17](#java)
+2. [maven](#maven)
+3. [docker](#docker)
+4. [jmeter-5.4.1](#jmeter)
 
-install infra
-1. ### java-17
+#### [services](#services)
+1. [docker-compose.yml](#docker-compose)
+2. [prometheus](#prometheus)
+3. [influxdb](#influxdb)
+4. [grafana](#grafana)
+5. [jmeter](#jmeter)
+
+### install infrastructure
+1. ### java
    1. #### **macOs**
       - `brew install openjdk@17`
    2. #### **linux**
@@ -53,8 +61,8 @@ install infra
       newgrp docker &&
       reboot
       ```
-4. ### jmeter 5.4.1
-   1. macOs
+4. ### jmeter
+   1. **macOs**
       ```bash
       mkdir ~/tools/ &&
       cd ~/tools/ &&
@@ -63,7 +71,7 @@ install infra
       cd ./apache-jmeter-5.4.1/bin/ &&
       ./jmeter
       ```
-   2. linux
+   2. **linux**
       ```bash
       mkdir ~/tools/ &&
       cd ~/tools/ &&
@@ -72,19 +80,27 @@ install infra
       cd ./apache-jmeter-5.4.1/bin/ &&
       ./jmeter
       ```
-   3. windows
+   3. **windows**
       - downloads [.zip](https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.1.zip)
       - unzip .zpi arch
-      - run 
+      - run jmeter.bat
 
-into Grafana
+### services
+1. #### **docker-compose** 
+     - for deploy reservation_service
+       ```bash
+        docker-compose -f docker-compose.yml  
+       ```
+       
+
+Grafana
 
 connect prometheus db on grafana:
 
 go to -> /connections/add-new-connection
 select prometheus db
 hit add new data source btn
-set http:127.0.0.1:9090 to the inputfield "Prometheus server URL *"
+set http://prometheus:9090 to the inputfield "Prometheus server URL *"
 
 dashboards
 - [cAdvisor](https://grafana.com/grafana/dashboards/14282-cadvisor-exporter/) : 14282
