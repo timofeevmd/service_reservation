@@ -87,21 +87,57 @@ this project was build for performance testing courses.  don't judge strictly
 
 ### services
 1. #### **docker-compose** 
-     - for deploy reservation_service
+   -  for deploy reservation_service
        ```bash
-        docker-compose -f docker-compose.yml  
+        docker-compose -f docker-compose.yml up -d 
        ```
-       
-
-Grafana
-
-connect prometheus db on grafana:
-
-go to -> /connections/add-new-connection
-select prometheus db
-hit add new data source btn
-set http://prometheus:9090 to the inputfield "Prometheus server URL *"
-
-dashboards
-- [cAdvisor](https://grafana.com/grafana/dashboards/14282-cadvisor-exporter/) : 14282
-- [node_exporter](https://grafana.com/grafana/dashboards/1860-node-exporter-full/) : 1860
+2. #### **prometheus**
+   - prometheus config file `monitoring/config/prometheus.yml`
+   - prometheus node down alerting config `monitoring/config/node_down.yml`
+   - official [docs](https://prometheus.io/docs/introduction/overview/)
+3. #### **influxdb**
+   - official [docs](https://docs.influxdata.com/influxdb/v1/)
+4. #### **grafana**
+   - official [docs](https://grafana.com/docs/grafana/latest/)
+   - grafana [dashboards](https://grafana.com/grafana/dashboards/)
+     - **how to connect data base**
+       - **prometheus** -> go to
+         - /connections/add-new-connection
+         - select prometheus
+         - hit `add new data source` button
+         - set `http://prometheus:9090` into the inputfield "Prometheus server URL"
+         - hit `Save and test` button onto the futter 
+       - **influx** -> go to
+         - /connections/add-new-connection
+         - select influxdb
+         - hit `add new data source` button
+         - set` http:influxdb:8086` into http part field `URL`
+         - on the `InfluxDB Details` part
+         - fields:
+           - database: `loadTestingDB`
+           - user: `admin`
+           - password: `admin`
+     - **importing dashboards**
+       - **prometheus** -> go to
+         - cAdvisor
+         - /dashboards
+         - hit `new` button -> `import` button
+           - into the `Find and import dashboards` field set id `14282` for [cAdvisor](https://grafana.com/grafana/dashboards/14282-cadvisor-exporter/) dashboard
+           - choose prometheus as database
+           - hit the `import` button
+           - be happy - that's the most important!!!
+         - node_exporter
+         - /dashboards
+         - hit `new` button -> `import` button
+             - into the `Find and import dashboards` field set id `1860` for [node_exporter](https://grafana.com/grafana/dashboards/1860-node-exporter-full/) dashboard
+             - choose prometheus as database
+             - hit the `import` button
+       - **influx** -> go to
+         - /dashboards
+         - hit `new` button -> `import` button
+           - into the `Find and import dashboards` field set id `5496` for [Apache JMeter Dashboard](https://grafana.com/grafana/dashboards/5496-apache-jmeter-dashboard-by-ubikloadpack/) dashboard
+           - choose influxDB as database
+           - hit the `import` button
+         
+5. #### **jmeter**
+   - official [docs](https://jmeter.apache.org/usermanual/index.html)
