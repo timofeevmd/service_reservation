@@ -9,9 +9,9 @@ this project was build for performance testing courses.  don't judge strictly
 
 #### [services](#services)
 1. [docker-compose.yml](#docker-compose)
-2. [prometheus](#prometheus)
-3. [influxdb](#influxdb)
-4. [grafana](#grafana)
+2. [grafana](#grafana)
+3. [prometheus](#prometheus)
+4. [influxdb](#influxdb)
 5. [jmeter](#jmeter)
 
 ### install infrastructure
@@ -143,4 +143,4 @@ this project was build for performance testing courses.  don't judge strictly
       - official [docs](https://docs.influxdata.com/influxdb/v1/)
 5. #### **jmeter**
     - INFO
-     - official [docs](https://jmeter.apache.org/usermanual/index.html)
+      - official [docs](https://jmeter.apache.org/usermanual/index.html)
