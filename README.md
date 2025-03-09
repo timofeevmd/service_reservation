@@ -1,20 +1,20 @@
 # service_reservation
 this project was build for performance testing courses.  don't judge strictly
 
-#### [infrastructure](#install-infrastructure)
+## [infrastructure](#install-infrastructure)
 1. [java-17](#java)
 2. [maven](#maven)
 3. [docker](#docker)
 4. [jmeter-5.4.1](#jmeter)
 
-#### [services](#services)
+## [services](#services)
 1. [docker-compose.yml](#docker-compose)
 2. [grafana](#grafana)
 3. [prometheus](#prometheus)
 4. [influxdb](#influxdb)
 5. [jmeter](#jmeter)
 
-### install infrastructure
+## install infrastructure
 1. ### java
    1. #### **macOs**
       - `brew install openjdk@17`
@@ -85,12 +85,28 @@ this project was build for performance testing courses.  don't judge strictly
       - unzip .zpi arch
       - run jmeter.bat
 
-### services
+## services
 1. #### **docker-compose** 
-   -  for deploy reservation_service
-       ```bash
-        docker-compose -f docker-compose.yml up -d 
-       ```
+   - from root directory start docker-compose reservation_service
+      ```bash
+       docker-compose -f docker-compose.yml up -d 
+      ```
+   - check current state
+     ```bash
+     docker ps -a
+     ```
+   - expected result
+     ```bash
+     CONTAINER ID   IMAGE                                     COMMAND                  CREATED      STATUS                      PORTS                                            NAMES
+     8472204b071f   influxdb:1.8                              "/entrypoint.sh infl…"   2 days ago   Up 22 minutes               0.0.0.0:8083->8083/tcp, 0.0.0.0:8086->8086/tcp   influxdb
+     5516036bb73b   michaelt1223/perf_sr_frontend:latest      "/docker-entrypoint.…"   5 days ago   Up 22 minutes               80/tcp, 0.0.0.0:3000->3000/tcp                   frontend
+     7fde5b402724   michaelt1223/perf_sr_backend:latest       "java -jar app.jar"      5 days ago   Up 22 minutes               0.0.0.0:8080->8080/tcp                           backend
+     f08d6be43900   postgres:latest                           "docker-entrypoint.s…"   5 days ago   Up 22 minutes (healthy)     0.0.0.0:5432->5432/tcp                           database
+     de5d1b1f9e26   prom/prometheus:latest                    "/bin/prometheus --c…"   5 days ago   Up 22 minutes               0.0.0.0:9091->9090/tcp                           prometheus
+     28fd29a8499a   grafana/grafana:latest                    "/run.sh"                5 days ago   Up 22 minutes               0.0.0.0:3001->3000/tcp                           grafana
+     7e25219f1688   quay.io/prometheus/node-exporter:latest   "/bin/node_exporter"     5 days ago   Up 22 minutes               0.0.0.0:9100->9100/tcp                           node_exporter
+     aee27e4ea7b1   gcr.io/cadvisor/cadvisor:latest           "/usr/bin/cadvisor -…"   5 days ago   Up 22 minutes (unhealthy)   8080/tcp, 0.0.0.0:8081->8081/tcp                 cadvisor
+     ```
    
 2. #### **grafana**
    - INFO
