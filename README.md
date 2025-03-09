@@ -113,26 +113,28 @@ this project was build for performance testing courses.  don't judge strictly
            - database: `loadTestingDB`
            - user: `admin`
            - password: `admin`
-     - **importing dashboards:**
-       - **for prometheus** -> go to
-              - local [grafata](http://localhost:3001/dashboards)
-              - click `new` button -> `import` button
-                   - into the `Find and import dashboards` field set id `14282` for [cAdvisor](https://grafana.com/grafana/dashboards/14282-cadvisor-exporter/) dashboard
-                     - choose prometheus as datasource
-                     - click the `import` button
-                     - be happy - that's the most important!!!
-         - node_exporter
-         - local [grafata](http://localhost:3001/dashboards)
-         - click `new` button -> `import` button
+     - **import dashboards:**
+       - **for prometheus** 
+         - for cAdvisor -> go to
+           - local [grafata](http://localhost:3001/dashboards)
+           - click `new` button -> `import` button
+                - into the `Find and import dashboards` field set id `14282` for [cAdvisor](https://grafana.com/grafana/dashboards/14282-cadvisor-exporter/) dashboard
+                - choose prometheus as datasource
+                - click the `import` button
+                - be happy - that's the most important!!!
+         - for node_exporter ->
+           - local [grafata](http://localhost:3001/dashboards)
+           - click `new` button -> `import` button
              - into the `Find and import dashboards` field set id `1860` for [node_exporter](https://grafana.com/grafana/dashboards/1860-node-exporter-full/) dashboard
              - choose prometheus as database
              - click the `import` button
-       - **influx** -> go to
-         - local [grafata](http://localhost:3001/dashboards)
-         - click `new` button -> `import` button
-           - into the `Find and import dashboards` field set id `5496` for [Apache JMeter](https://grafana.com/grafana/dashboards/5496-apache-jmeter-dashboard-by-ubikloadpack/) dashboard
-           - choose influxDB as datasource
-           - click the `import` button
+       - **influx** 
+         - for **JMeter** -> go to
+           - local [grafata](http://localhost:3001/dashboards)
+           - click `new` button -> `import` button
+             - into the `Find and import dashboards` field set id `5496` for [Apache JMeter](https://grafana.com/grafana/dashboards/5496-apache-jmeter-dashboard-by-ubikloadpack/) dashboard
+             - choose influxDB as datasource
+             - click the `import` button
 3. #### **prometheus**
     - INFO 
       - prometheus config file `monitoring/config/prometheus.yml`
