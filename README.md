@@ -112,6 +112,7 @@ this project was build for performance testing courses.  don't judge strictly
    - INFO
      - official [docs](https://grafana.com/docs/grafana/latest/)
      - grafana [dashboards](https://grafana.com/grafana/dashboards/)
+     - standard username: `admin`, password: `admin`
    - **how to connect data bases:**
        - **prometheus** -> go to
          - local [grafata](http://localhost:3001/connections/add-new-connection)
@@ -145,6 +146,7 @@ this project was build for performance testing courses.  don't judge strictly
              - choose prometheus as database
              - click the `import` button
        - **influx** 
+       - standard username: `admin`, password: `admin`
          - for **JMeter** -> go to
            - local [grafata](http://localhost:3001/dashboards)
            - click `new` button -> `import` button
