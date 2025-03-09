@@ -67,7 +67,7 @@ this project was build for performance testing courses.  don't judge strictly
       mkdir ~/tools/ &&
       cd ~/tools/ &&
       curl -OL https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.zip      
-      unzip apache-jmeter-5.4.1.ziptgf'' &&
+      unzip apache-jmeter-5.4.1.zip &&
       cd ./apache-jmeter-5.4.1/bin/ &&
       ./jmeter
       ```
