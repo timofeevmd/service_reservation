@@ -139,12 +139,18 @@ this project was build for performance testing courses.  don't judge strictly
                 - choose prometheus as datasource
                 - click the `import` button
                 - be happy - that's the most important!!!
-         - for node_exporter ->
+         - for node_exporter -> go to
            - local [grafata](http://localhost:3001/dashboards)
            - click `new` button -> `import` button
              - into the `Find and import dashboards` field set id `1860` for [node_exporter](https://grafana.com/grafana/dashboards/1860-node-exporter-full/) dashboard
              - choose prometheus as database
              - click the `import` button
+         - for postgres_exporter -> go to
+           - local [grafata](http://localhost:3001/dashboards)
+           - click `new` button -> `import` button
+               - into the `Find and import dashboards` field set id `9628` for [postgres_exporter](https://grafana.com/grafana/dashboards/9628-postgresql-database/) dashboard
+               - choose prometheus as database
+               - click the `import` button
        - **influx** 
        - standard username: `admin`, password: `admin`
          - for **JMeter** -> go to
