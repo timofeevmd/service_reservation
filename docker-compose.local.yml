@@ -190,6 +190,7 @@ services:
   postgres_exporter:
     image: prometheuscommunity/postgres-exporter
     container_name: postgres_exporter
+    restart: always
     environment:
       DATA_SOURCE_NAME: postgres://test_user:qwe123@database:5432/postgres?sslmode=disable
       PG_EXPORTER_EXTEND_QUERY_PATH: /etc/postgres_exporter/postgres_exporter.yml
