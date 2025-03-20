@@ -1,0 +1,125 @@
+global:
+  # Global parameters applied to all queries
+  query_timeout: 30s
+  min_interval: 10s
+
+pg_stat_database:
+  query: "SELECT datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit, tup_returned, tup_fetched, tup_inserted, tup_updated, tup_deleted, conflicts, temp_files, temp_bytes, deadlocks FROM pg_stat_database WHERE datname NOT IN ('template0', 'template1')"
+  metrics:
+    - datname:
+        usage: "LABEL"
+        description: "Database name"
+    - numbackends:
+        usage: "GAUGE"
+        description: "Number of connected clients"
+    - xact_commit:
+        usage: "COUNTER"
+        description: "Number of committed transactions"
+    - xact_rollback:
+        usage: "COUNTER"
+        description: "Number of rolled back transactions"
+    - blks_read:
+        usage: "COUNTER"
+        description: "Number of disk block reads"
+    - blks_hit:
+        usage: "COUNTER"
+        description: "Number of cache hits"
+    - deadlocks:
+        usage: "COUNTER"
+        description: "Number of detected deadlocks"
+
+pg_stat_tables:
+  query: "SELECT schemaname, relname, seq_scan, seq_tup_read, idx_scan, idx_tup_fetch, n_tup_ins, n_tup_upd, n_tup_del, n_tup_hot_upd, n_live_tup, n_dead_tup FROM pg_stat_all_tables"
+  metrics:
+    - schemaname:
+        usage: "LABEL"
+        description: "Schema name"
+    - relname:
+        usage: "LABEL"
+        description: "Table name"
+    - seq_scan:
+        usage: "COUNTER"
+        description: "Number of sequential scans"
+    - idx_scan:
+        usage: "COUNTER"
+        description: "Number of index scans"
+    - n_live_tup:
+        usage: "GAUGE"
+        description: "Number of live tuples"
+    - n_dead_tup:
+        usage: "GAUGE"
+        description: "Number of dead tuples"
+
+pg_stat_indexes:
+  query: "SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_all_indexes"
+  metrics:
+    - schemaname:
+        usage: "LABEL"
+        description: "Schema name"
+    - relname:
+        usage: "LABEL"
+        description: "Table name"
+    - indexrelname:
+        usage: "LABEL"
+        description: "Index name"
+    - idx_scan:
+        usage: "COUNTER"
+        description: "Number of index scans"
+    - idx_tup_read:
+        usage: "COUNTER"
+        description: "Number of tuples read via index"
+    - idx_tup_fetch:
+        usage: "COUNTER"
+        description: "Number of successful index fetches"
+
+pg_locks:
+  query: "SELECT mode, COUNT(*) as count FROM pg_locks GROUP BY mode"
+  metrics:
+    - mode:
+        usage: "LABEL"
+        description: "Lock type"
+    - count:
+        usage: "GAUGE"
+        description: "Number of locks by type"
+
+pg_replication:
+  query: "SELECT pid, state, sync_state, write_lag, flush_lag, replay_lag FROM pg_stat_replication"
+  metrics:
+    - pid:
+        usage: "LABEL"
+        description: "Replication process PID"
+    - state:
+        usage: "LABEL"
+        description: "Replication state"
+    - sync_state:
+        usage: "LABEL"
+        description: "Synchronization type"
+    - write_lag:
+        usage: "GAUGE"
+        description: "Write lag"
+    - flush_lag:
+        usage: "GAUGE"
+        description: "Flush lag"
+    - replay_lag:
+        usage: "GAUGE"
+        description: "Replay lag"
+
+pg_settings:
+  query: "SELECT name, setting FROM pg_settings WHERE name IN ('max_connections', 'shared_buffers', 'work_mem', 'maintenance_work_mem', 'effective_cache_size')"
+  metrics:
+    - name:
+        usage: "LABEL"
+        description: "PostgreSQL setting name"
+    - setting:
+        usage: "GAUGE"
+        description: "PostgreSQL setting value"
+
+custom_query_slow_queries:
+  query: "SELECT datname, count(*) as slow_count FROM pg_stat_activity WHERE state = 'active' AND now() - query_start > interval '5 minutes' GROUP BY datname"
+  metrics:
+    - datname:
+        usage: "LABEL"
+        description: "Database name"
+    - slow_count:
+        usage: "GAUGE"
+        description: "Number of slow queries (>5 minutes)"

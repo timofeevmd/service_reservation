@@ -172,10 +172,10 @@ services:
       resources:
         limits:
           cpus: "0.2"
-          memory: "256m"
+          memory: "512m"
         reservations:
           cpus: "0.1"
-          memory: "128m"
+          memory: "256m"
     volumes:
       - /:/rootfs:ro
       - /var/run/docker.sock:/var/run/docker.sock:rw
@@ -184,6 +184,29 @@ services:
     cgroup_parent: system.slice
     ports:
       - "8081:8081"
+    networks:
+      - ${NETWORKS}
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: postgres_exporter
+    restart: always
+    environment:
+      DATA_SOURCE_NAME: postgres://test_user:qwe123@database:5432/postgres?sslmode=disable
+    volumes:
+      - ${VOLUMES_CONFIG}postgres_exporter.yml:/etc/postgres_exporter/postgres_exporter.yml
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: "256m"
+        reservations:
+          cpus: "0.1"
+          memory: "128m"
+    ports:
+      - "9187:9187"
+    depends_on:
+      - database
     networks:
       - ${NETWORKS}
 
