@@ -51,6 +51,8 @@ services:
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_CLIENT_RESTTEMPLATE: INFO
       MANAGEMENT_ENDPOINT_LOGGERS_ENABLED: "true"
       MANAGEMENT_ENDPOINT_METRICS_ENABLED: "true"
+    extra_hosts:
+      - "127.0.0.1.nip.io:host-gateway"
     ports:
       - "8080:8080"
     depends_on:
@@ -72,6 +74,8 @@ services:
         reservations:
           cpus: "0.2"
           memory: "256m"
+    extra_hosts:
+      - "127.0.0.1.nip.io:host-gateway"
     ports:
       - "3000:3000"
     depends_on:
