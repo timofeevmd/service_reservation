@@ -25,7 +25,7 @@ const ReservationPage = () => {
 
         const fetchUser = async () => {
             try {
-                const response = await api.get("http://localhost:8080/api/users/me");
+                const response = await api.get("/users/me");
                 if (isMounted) {
                     setUser(response.data);
                 }
@@ -70,14 +70,22 @@ const ReservationPage = () => {
     
         try {
             const token = localStorage.getItem("auth_token");
-            const response = await fetch("http://localhost:8080/api/reservations/create", {
+
+            const response = await api.post(`/reservations/create`, JSON.stringify(reservationData), {
+                headers: {
+                    "Content-Type": "application/json" ,
+                    "Authorization": `Bearer ${token}`,
+                }
+            })
+
+            /*const response = await fetch(`/reservations/create`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 },
                 body: JSON.stringify(reservationData)
-            });
+            });*/
 
             if (!response.ok) {
                 const errorText = await response.text();

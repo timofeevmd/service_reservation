@@ -1,5 +1,10 @@
 version: '3.8'
 
+networks:
+  monitor:
+    driver: bridge
+    name: service_reservation_monitor
+
 services:
   backend:
     build:
@@ -37,9 +42,9 @@ services:
       MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED: "true"
       SPRING_OUTPUT_ANSI_ENABLED: "always"
       LOGGING_PATTERN_CONSOLE: "%d{yyyy-MM-dd HH:mm:ss} [%p] %c{1} - %m%n"
-      LOGGING_LEVEL_ROOT: INFO
+      # LOGGING_LEVEL_ROOT: INFO
       LOGGING_LEVEL_COM_SERVICE: INFO
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: INFO
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
       SPRING_JPA_SHOW_SQL: "true"
       LOGGING_LEVEL_ORG_HIBERNATE_SQL: INFO
       LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL_BASICBINDER: INFO
@@ -48,6 +53,8 @@ services:
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_CLIENT_RESTTEMPLATE: INFO
       MANAGEMENT_ENDPOINT_LOGGERS_ENABLED: "true"
       MANAGEMENT_ENDPOINT_METRICS_ENABLED: "true"
+    extra_hosts:
+      - "127.0.0.1.nip.io:host-gateway"
     ports:
       - "8080:8080"
     depends_on:
@@ -71,8 +78,10 @@ services:
         reservations:
           cpus: "0.2"
           memory: "256m"
+    extra_hosts:
+      - "127.0.0.1.nip.io:host-gateway"
     ports:
-      - "3000:3000"
+      - "80:80"
     depends_on:
       - backend
     networks:
