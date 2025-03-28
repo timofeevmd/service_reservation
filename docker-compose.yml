@@ -139,10 +139,8 @@ services:
     container_name: influxdb
     ports:
       - "8086:8086"
-    volumes:
-      - ./var/docker/data/influxdb:/var/lib/influxdb:cached
     environment:
-      - INFLUXDB_DB='loadTestingDB'
+      - INFLUXDB_DB=loadTestingDB
       - INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
       - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
     networks:
