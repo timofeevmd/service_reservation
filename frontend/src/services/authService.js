@@ -9,7 +9,7 @@ export const register = async (userData) => {
             password: userData.password
         };
 
-        const response = await api.post("/auth/register", JSON.stringify(formattedData), {
+        const response = await api.post("/api/auth/register", JSON.stringify(formattedData), {
             headers: { "Content-Type": "application/json" }
         });
 
@@ -24,7 +24,7 @@ export const register = async (userData) => {
 
 export const login = async (username, password) => {
     try {
-        const response = await fetch("http://localhost:8080/api/auth/login", {
+        const response = await fetch(`/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
