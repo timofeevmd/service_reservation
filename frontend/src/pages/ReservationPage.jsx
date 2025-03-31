@@ -64,7 +64,7 @@ const ReservationPage = () => {
             endDate,
             duration,
             status: "Active",
-            user: { id: user.id },
+            userId: user.id,
             itemId
         };
     
@@ -77,15 +77,6 @@ const ReservationPage = () => {
                     "Authorization": `Bearer ${token}`,
                 }
             })
-
-            /*const response = await fetch(`/reservations/create`, {
-                method: "POST",
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(reservationData)
-            });*/
 
             if (!response.ok) {
                 const errorText = await response.text();

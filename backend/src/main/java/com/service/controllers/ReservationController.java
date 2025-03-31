@@ -1,5 +1,7 @@
 package com.service.controllers;
 
+import com.service.DTO.ReservationCreateDTO;
+import com.service.DTO.ReservationResponseDTO;
 import com.service.models.Reservation;
 import com.service.models.User;
 import com.service.security.JwtTokenProvider;
@@ -48,26 +50,6 @@ public class ReservationController {
     }
 
     /**
-     * Create a new reservation.
-     *
-     * @param reservation Reservation object
-     * @return Created reservation
-     */
-    @PostMapping("/create")
-    public ResponseEntity<?> createReservation(@Valid @RequestBody Reservation reservation) {
-        return reservationRequestTimer.record(() -> {
-            try {
-                Reservation savedReservation = reservationService.createReservation(reservation);
-                createdReservations.increment();
-                return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
-            } catch (Exception e) {
-                createdReservationsFailure.increment();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating reservation: " + e.getMessage());
-            }
-        });
-    }
-
-    /**
      * Get a reservation by ID.
      *
      * @param id Reservation ID
@@ -76,9 +58,7 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getReservationById(@Valid @PathVariable Long id) {
         Optional<Reservation> reservation = reservationService.findById(id);
-        return reservation.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .build());
+        return reservation.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     /**
@@ -96,7 +76,7 @@ public class ReservationController {
      *
      * @return List of user reservations
      */
-    @GetMapping("/user")
+    /*@GetMapping("/user")
     public ResponseEntity<?> getUserReservations(@RequestHeader("Authorization") String token, @RequestParam(defaultValue = "15") int limit, @RequestParam(defaultValue = "0") int offset) {
         return userReservationsRequestTimer.record(() -> {
             try {
@@ -114,6 +94,60 @@ public class ReservationController {
             } catch (Exception e) {
                 createdReservationsFailure.increment();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error loading reservations: " + e.getMessage());
+            }
+        });
+    }*/
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserReservations(@RequestHeader("Authorization") String token, @RequestParam(defaultValue = "15") int limit, @RequestParam(defaultValue = "0") int offset) {
+        return userReservationsRequestTimer.record(() -> {
+            try {
+                String username = jwtTokenProvider.getUsernameFromToken(token.replace("Bearer ", ""));
+                Optional<User> userOpt = userService.findByUsername(username);
+                if (userOpt.isEmpty()) {
+                    createdReservationsFailure.increment();
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                }
+                createdReservations.increment();
+                List<ReservationResponseDTO> reservations = reservationService.getUserReservations(userOpt.get(), limit, offset);
+                return new ResponseEntity<>(reservations, HttpStatus.OK);
+            } catch (Exception e) {
+                createdReservationsFailure.increment();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error loading reservations: " + e.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Create a new reservation.
+     *
+     * @param requestDto Reservation object
+     * @return Created reservation
+     */
+    /*@PostMapping("/create")
+    public ResponseEntity<?> createReservation(@Valid @RequestBody Reservation reservation) {
+        return reservationRequestTimer.record(() -> {
+            try {
+                Reservation savedReservation = reservationService.createReservation(reservation);
+                createdReservations.increment();
+                return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
+            } catch (Exception e) {
+                createdReservationsFailure.increment();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating reservation: " + e.getMessage());
+            }
+        });
+    }*/
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationCreateDTO requestDto) {
+        return reservationRequestTimer.record(() -> {
+            try {
+                ReservationResponseDTO responseDto = reservationService.createReservationFromDTO(requestDto);
+                createdReservations.increment();
+                return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+            } catch (IllegalArgumentException e) {
+                createdReservationsFailure.increment();
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         });
     }
@@ -141,9 +175,7 @@ public class ReservationController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
         StringBuilder errors = new StringBuilder();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; ")
-        );
+        ex.getBindingResult().getFieldErrors().forEach(error -> errors.append(error.getField()).append(": ").append(error.getDefaultMessage()).append("; "));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.toString());
     }
 }

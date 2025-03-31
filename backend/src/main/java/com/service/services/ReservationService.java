@@ -1,8 +1,11 @@
 package com.service.services;
 
+import com.service.DTO.ReservationCreateDTO;
+import com.service.DTO.ReservationResponseDTO;
 import com.service.models.Reservation;
 import com.service.models.User;
 import com.service.repositories.ReservationRepository;
+import com.service.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -19,6 +23,62 @@ public class ReservationService {
     @Autowired
     public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public ReservationResponseDTO createReservationFromDTO(ReservationCreateDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Reservation reservation = new Reservation();
+        reservation.setType(dto.getType());
+        reservation.setStartDate(dto.getStartDate());
+        reservation.setEndDate(dto.getEndDate());
+        reservation.setDuration(dto.getDuration());
+        reservation.setStatus(dto.getStatus());
+        reservation.setUser(user);
+        reservation.setItemId(dto.getItemId());
+
+        Reservation saved = reservationRepository.save(reservation);
+
+        ReservationResponseDTO.UserDTO userDto = new ReservationResponseDTO.UserDTO(
+                saved.getUser().getId(),
+                saved.getUser().getUsername()
+        );
+
+        return new ReservationResponseDTO(
+                saved.getId(),
+                saved.getType(),
+                saved.getStartDate(),
+                saved.getEndDate(),
+                saved.getDuration(),
+                saved.getStatus(),
+                userDto,
+                saved.getItemId()
+        );
+    }
+
+    public List<ReservationResponseDTO> getUserReservations(User user, int limit, int offset) {
+        Pageable pageable = PageRequest.of(offset / limit, limit);
+        return reservationRepository.findByUserWithPagination(user, pageable).stream()
+                .map(reservation -> {
+                    ReservationResponseDTO.UserDTO userDto = new ReservationResponseDTO.UserDTO(
+                            reservation.getUser().getId(),
+                            reservation.getUser().getUsername()
+                    );
+                    return new ReservationResponseDTO(
+                            reservation.getId(),
+                            reservation.getType(),
+                            reservation.getStartDate(),
+                            reservation.getEndDate(),
+                            reservation.getDuration(),
+                            reservation.getStatus(),
+                            userDto,
+                            reservation.getItemId()
+                    );
+                }).collect(Collectors.toList());
     }
 
     /**
