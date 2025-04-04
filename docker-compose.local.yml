@@ -240,5 +240,18 @@ services:
     networks:
       - ${NETWORKS}
 
+  docs:
+    container_name: documentation
+    hostname: documentation
+    restart: always
+    build:
+      context: documentation
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./docs:/app
+    working_dir: /app
+
 volumes:
   db_data:

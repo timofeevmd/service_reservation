@@ -1,0 +1,36 @@
+/* Sidebar фиксируется слева */
+.VPContent.has-sidebar .VPContentSidebar {
+    position: sticky !important;
+    top: 0 !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    border-right: 1px solid #eaeaea !important;
+}
+
+/* Убрать стандартную collapse-кнопку */
+.VPSidebar .VPSidebarToggleButton {
+    display: none !important;
+}
+
+/* Закрыть все группы по умолчанию */
+.VPSidebarGroup .VPSidebarGroupItems {
+    display: none !important;
+}
+
+/* Только открытая группа раскрывается */
+.VPSidebarGroup.open .VPSidebarGroupItems {
+    display: block !important;
+}
+
+/* Стрелка у заголовка группы */
+.VPSidebarGroup .VPSidebarGroupTitle::after {
+    content: "▶" !important;
+    float: right !important;
+    transform: rotate(0deg) !important;
+    transition: transform 0.2s ease !important;
+}
+
+/* Поворот стрелки при открытии */
+.VPSidebarGroup.open .VPSidebarGroupTitle::after {
+    transform: rotate(90deg) !important;
+}

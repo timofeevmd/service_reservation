@@ -1,0 +1,20 @@
+{
+  "name": "service_reservation_doc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "deploy": "gh-pages -d docs/.vitepress/dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "gh-pages": "^5.0.0",
+    "vitepress": "^1.6.3"
+  }
+}
