@@ -29,3 +29,6 @@ replay_pid*
 /frontend/package-lock.json
 /backend/target/
 /var/
+/documentation/.vitepress/cache/
+/documentation/.vitepress/dist/
+/documentation/node_modules/
