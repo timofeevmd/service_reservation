@@ -15,45 +15,115 @@ this project was build for performance testing courses.  don't judge strictly
 5. [jmeter](#jmeter)
 
 ## install infrastructure
+0. The working directory throughout the entire master class will be located in the root directory of your user account if you are using a Unix-like system, or on drive C if you are using Windows. This is where we will place the cloned project.
+```bash
+mkdir ~/projects/ &&
+cd ~/projects/ &&
+git clone https://github.com/timofeevmd/service_reservation_mk.git
+```
+
+
 1. ### java
-   1. #### **macOs**
-      - `brew install openjdk@17`
-   2. #### **linux**
-      - [manual](https://www.digitalocean.com/community/tutorials/how-to-install-java-on-centos-and-fedora) 
-      - if manual is not work
-      - `wget https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.9+9/OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz`
-      - if wget is not work try to download [openjdk-17-...](https://adoptium.net/temurin/releases/?arch=x64&os=linux&package=jdk&version=17)
-      ```bash
-        sudo mkdir -p /opt/java
-        cd /opt/java
-        sudo tar -xvzf ~/OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz
-        sudo mv jdk-17.0.9+9 java-17
-        sudo vim /etc/profile.d/java.sh
+    1. #### **macOs**
+       ```bash
+       brew install openjdk@11
+       ```
+        - Expected result
+        ```bash
+        java --version
         ```
-      - set of them
-      ```bash
-        export JAVA_HOME=/opt/java/java-17
-        export PATH=$JAVA_HOME/bin:$PATH
+       Output
+        ```bash
+        openjdk 11.0.26 2025-01-21
+        OpenJDK Runtime Environment Homebrew (build 11.0.26+0)
+        OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+0, mixed mode)
+       ```
+   troubleshooting
+    - if you had different java version, check the [link](https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-macos) for switch between your jdk's
+    2. #### **linux**
+        - [manual](https://www.digitalocean.com/community/tutorials/how-to-install-java-on-centos-and-fedora)
+        - if manual is not work
+        - `wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-linux-64.tar.gz`
+        - if wget is not work try to download [openjdk-11-...](https://builds.openlogic.com/openjdk-downloads?field_java_parent_version_target_id=406&field_operating_system_target_id=426&field_architecture_target_id=391&field_java_package_target_id=396)
+        ```bash
+          sudo mkdir -p /opt/java &&
+          cd /opt/java &&
+          sudo tar -xvzf ~/openlogic-openjdk-11.0.26+4-linux-x64.tar.gz &&
+          sudo mv openlogic-openjdk-11.0.26+4-linux-x64 java-11 &&
+          sudo vim /etc/profile.d/java.sh
+          ```
+        - set of them
+        ```bash
+          export JAVA_HOME=/opt/java/java-11
+          export PATH=$JAVA_HOME/bin:$PATH
+          ```
+        - `source /etc/profile.d/java.sh`
+        - Expected result
+         ```bash
+         java --version
+         ```
+       Output
+         ```bash
+         openjdk 11.0.26 2025-01-21
+         OpenJDK Runtime Environment Homebrew (build 11.0.26+0)
+         OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+0, mixed mode)
+         ```
+       troubleshooting
+        - if you had different java version, check the [link](https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-macos) for switch between your jdk's
+
+    3. #### **windows**
+        - download [.zip](https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-windows-x64.zip) or [.msi](https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-windows-x64.msi) to use installation wizard
+        - Follow the installation wizard, choosing 'Set JAVA_HOME variable'
+        - Note the installation path (usually C:\Program Files\OpenLogic\jdk-11.0.26.4-hotspot\ or C:\Program Files\Java\jdk-11).
+        - Open Control Panel → System → Advanced system settings.
+        - Go to the Advanced tab and click Environment Variables.
+        - Under System Variables
+        - Find the `JAVA_HOME` variable (if it does not exist, click New)
+        - Set `JAVA_HOME=C:\Program Files\OpenLogic\jdk-11.0.26.4-hotspot\`
+        - Find Path → click Edit → New
+        - Set `%JAVA_HOME%\bin`
+
+        - Expected result
+        ```bash
+        java --version
         ```
-      - `source /etc/profile.d/java.sh`
-   3. #### **windows**
-      - download [.zip](https://adoptium.net/temurin/releases/?arch=x64&os=windows&package=jdk&version=17)
-      - Follow the installation wizard, keeping the default settings.
-      - Note the installation path (usually C:\Program Files\Eclipse Adoptium\jdk-17 or C:\Program Files\Java\jdk-17).
-      - Open Control Panel → System → Advanced system settings.
-      - Go to the Advanced tab and click Environment Variables.
-      - Under System Variables
-      - Find the `JAVA_HOME` variable (if it does not exist, click New)
-      - Set `JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17`
-      - Find Path → click Edit → New
-      - Set `%JAVA_HOME%\bin`
+       Output
+        ```bash
+        openjdk 11.0.26 2025-01-21
+        OpenJDK Runtime Environment OpenLogic-OpenJDK (build 11.0.26+4-adhoc..jdk11u)
+        OpenJDK 64-Bit Server VM OpenLogic-OpenJDK (build 11.0.26+4-adhoc..jdk11u, mixed mode)
+       ```
+       troubleshooting
+        - if you had different java version, check the [link](https://stackoverflow.com/questions/26993101/switching-between-different-jdk-versions-in-windows) for switch between your jdk's
 2. ### maven
-   1. [manual](https://www.baeldung.com/install-maven-on-windows-linux-mac#bd-installing-maven-on-mac-os-x) for macOs/linux/windows
+    1. [manual](https://www.baeldung.com/install-maven-on-windows-linux-mac#bd-installing-maven-on-mac-os-x) for macOs/linux/windows
+        - Expected result
+       ```bash
+       mvn --version
+       ```
+       Output
+       ```bash
+       Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
+       Maven home: /opt/homebrew/Cellar/maven/3.9.9/libexec
+       Java version: 11.0.19, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home
+       Default locale: en_US, platform encoding: UTF-8
+       OS name: "mac os x", version: "15.3.2", arch: "aarch64", family: "mac"
+       ```
 3. ### docker
-   1. [manual](https://docs.docker.com/desktop/) for macOs/linux/windows
+    1. [manual](https://docs.docker.com/desktop/) for macOs/linux/windows
+    - Expected result
+        ```bash
+        docker --version &&
+        docker-compose --version
+        ```
+      Output like this
+        ```bash
+       Docker version 24.0.6, build ed223bc
+       Docker Compose version v2.23.0-desktop.1
+       ```
 
    troubleshooting
-      - Error permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.48/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
+    - Error permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.48/containers/json?all=1": dial unix /var/run/docker.sock: connect: permission denied
 
       ```bash
       sudo groupadd docker &&
@@ -62,30 +132,36 @@ this project was build for performance testing courses.  don't judge strictly
       reboot
       ```
 4. ### jmeter
-   1. **macOs**
-      ```bash
-      mkdir ~/tools/ &&
-      cd ~/tools/ &&
-      curl -OL https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.zip      
-      unzip apache-jmeter-5.4.1.zip &&
-      cd ./apache-jmeter-5.4.1/bin/ &&
-      ./jmeter
-      ```
-   2. **linux**
-      ```bash
-      mkdir ~/tools/ &&
-      cd ~/tools/ &&
-      wget https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.1.tgz &&
-      tar -xvzf apache-jmeter-5.4.1.tgz &&
-      cd ./apache-jmeter-5.4.1/bin/ &&
-      ./jmeter
-      ```
-   3. **windows**
-      - downloads [.zip](https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.1.zip)
-      - unzip .zpi arch
-      - run jmeter.bat
+    1. **macOs**
+       ```bash
+       mkdir ~/tools/ &&
+       cd ~/tools/ &&
+       curl -OL https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.zip      
+       unzip apache-jmeter-5.4.1.zip &&
+       cd ./apache-jmeter-5.4.1/bin/ &&
+       ./jmeter
+       ```
+    2. **linux**
+       ```bash
+       mkdir ~/tools/ &&
+       cd ~/tools/ &&
+       wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.tgz &&
+       tar -xvzf apache-jmeter-5.4.1.tgz &&
+       cd ./apache-jmeter-5.4.1/bin/ &&
+       ./jmeter
+       ```
+    3. **windows**
+        - downloads [.zip](https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.4.1.zip)
+        - unzip .zpi arch
+        - run jmeter.bat
 
 ## services
+<p style="color: yellow"> WARNING </p>
+
+0. open `.env` file on the root of project
+    1. If your laptop has an Intel or Ryzen CPU, change `PLATFORM` parm to `linux/amd64`
+    2. If your laptop has M1 or newer chip, change `PLATFORM` parm to `linux/arm64`
+   
 1. #### **docker-compose** 
    - from root directory start docker-compose reservation_service
       ```bash

@@ -238,6 +238,7 @@ services:
 
   documentation:
     container_name: documentation
+    restart: always
     build:
       context: documentation
       dockerfile: Dockerfile

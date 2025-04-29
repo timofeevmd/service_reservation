@@ -25,10 +25,6 @@ export default {
                     ]
                 },
                 {
-                    text: 'Process',
-                    link: '/process/',
-                },
-                {
                     text: 'Tools',
                     collapsible: true,
                     items: [
@@ -38,8 +34,23 @@ export default {
                 },
                 {
                     text: 'Analytics',
-                    link: '/analytics/',
-                }
+                    collapsible: true,
+                    items: [
+                        { text: '- Apache JMeter Dashboard Metrics (InfluxDB Backend Listener)', link: '/analysis/ApacheJMeterDashboard.md' },
+                        { text: '- Cadvisor Exporter Dashboard - Metric Breakdown and Analysis', link: '/analysis/CAdvisorDashboardMetrics.md' },
+                        { text: '- Node Exporter Full', link: '/analysis/NodeExporterDashboards.md' },
+                        { text: '- Postgres Exporter Dashboard - Metric Breakdown and Analysis', link: '/analysis/PostgresExporter.md' },
+                    ]
+                },
+                {
+                    text: 'Process',
+                    items: [
+                        { text: '- Methodology', link: '/documentations/Methodology.md' },
+                        { text: '- Scenarios', link: '/documentations/Scenarios.md' },
+                        { text: '- Reporting', link: '/documentations/Reporting.md' },
+                    ]
+                },
+
             ]
         }
     }

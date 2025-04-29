@@ -76,27 +76,6 @@ public class ReservationController {
      *
      * @return List of user reservations
      */
-    /*@GetMapping("/user")
-    public ResponseEntity<?> getUserReservations(@RequestHeader("Authorization") String token, @RequestParam(defaultValue = "15") int limit, @RequestParam(defaultValue = "0") int offset) {
-        return userReservationsRequestTimer.record(() -> {
-            try {
-                String username = jwtTokenProvider.getUsernameFromToken(token.replace("Bearer ", ""));
-                Optional<User> userOpt = userService.findByUsername(username);
-
-                if (userOpt.isEmpty()) {
-                    createdReservationsFailure.increment();
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
-                }
-
-                createdReservations.increment();
-                List<Reservation> reservations = reservationService.findByUserWithPagination(userOpt.get(), limit, offset);
-                return ResponseEntity.ok(reservations);
-            } catch (Exception e) {
-                createdReservationsFailure.increment();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error loading reservations: " + e.getMessage());
-            }
-        });
-    }*/
 
     @GetMapping("/user")
     public ResponseEntity<?> getUserReservations(@RequestHeader("Authorization") String token, @RequestParam(defaultValue = "15") int limit, @RequestParam(defaultValue = "0") int offset) {
@@ -124,20 +103,6 @@ public class ReservationController {
      * @param requestDto Reservation object
      * @return Created reservation
      */
-    /*@PostMapping("/create")
-    public ResponseEntity<?> createReservation(@Valid @RequestBody Reservation reservation) {
-        return reservationRequestTimer.record(() -> {
-            try {
-                Reservation savedReservation = reservationService.createReservation(reservation);
-                createdReservations.increment();
-                return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
-            } catch (Exception e) {
-                createdReservationsFailure.increment();
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating reservation: " + e.getMessage());
-            }
-        });
-    }*/
-
     @PostMapping("/create")
     public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationCreateDTO requestDto) {
         return reservationRequestTimer.record(() -> {
