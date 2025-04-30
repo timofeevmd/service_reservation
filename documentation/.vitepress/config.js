@@ -1,7 +1,7 @@
 export default {
     base: "/service_reservation_doc/",
     title: 'Load Testing Course',
-    description: 'Documentation for testing course',
+    description: 'Documentation for testing course',§
     themeConfig: {
         nav: [{ text: 'Home', link: '/' }],
         sidebar: {
@@ -45,9 +45,10 @@ export default {
                 {
                     text: 'Process',
                     items: [
-                        { text: '- Methodology', link: '/documentations/Methodology.md' },
-                        { text: '- Scenarios', link: '/documentations/Scenarios.md' },
-                        { text: '- Reporting', link: '/documentations/Reporting.md' },
+                        { text: '- Microservices architecture', link: '/process/MicroservicesArchitecture.md' },
+                        { text: '- PostProcessing', link: '/process/PostProcessing.md' },
+                        { text: '- Building an Iterative Load Testing process', link: '/process/BuildingAnIterativeLoadTestingProcess.md' },
+                        { text: '- Lifecycle', link: '/process/Lifecycle.md' },
                     ]
                 },
 
