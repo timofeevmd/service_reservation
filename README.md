@@ -19,7 +19,7 @@ this project was build for performance testing courses.  don't judge strictly
 ```bash
 mkdir ~/projects/ &&
 cd ~/projects/ &&
-git clone https://github.com/timofeevmd/service_reservation_mk.git
+git clone https://github.com/timofeevmd/service_reservation.git
 ```
 
 
