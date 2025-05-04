@@ -1,7 +1,7 @@
 export default {
     base: "/service_reservation_doc/",
     title: 'Load Testing Course',
-    description: 'Documentation for testing course',§
+    description: 'Documentation for testing course',
     themeConfig: {
         nav: [{ text: 'Home', link: '/' }],
         sidebar: {
