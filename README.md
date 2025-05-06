@@ -191,7 +191,7 @@ git clone https://github.com/timofeevmd/service_reservation.git
      - standard username: `admin`, password: `admin`
    - **how to connect data bases:**
        - **prometheus** -> go to
-         - local [grafata](http://localhost:3001/connections/add-new-connection)
+         - local [grafana](http://localhost:3001/connections/add-new-connection)
          - select prometheus
          - click `add new data source` button
          - set `http://prometheus:9090` into the inputfield "Prometheus server URL"
@@ -200,7 +200,7 @@ git clone https://github.com/timofeevmd/service_reservation.git
          - local [grafana](http://localhost:3001/connections/add-new-connection)
          - select influxdb
          - click `add new data source` button
-         - set` http:influxdb:8086` into http part field `URL`
+         - set` http://influxdb:8086` into http part field `URL`
          - on the `InfluxDB Details` part
          - fields:
            - database: `loadTestingDB`
@@ -209,33 +209,44 @@ git clone https://github.com/timofeevmd/service_reservation.git
      - **import dashboards:**
        - **for prometheus** 
          - for cAdvisor -> go to
-           - local [grafata](http://localhost:3001/dashboards)
+           - local [grafana](http://localhost:3001/dashboards)
            - click `new` button -> `import` button
                 - into the `Find and import dashboards` field set id `14282` for [cAdvisor](https://grafana.com/grafana/dashboards/14282-cadvisor-exporter/) dashboard
+                - click `Load` button
                 - choose prometheus as datasource
                 - click the `import` button
                 - be happy - that's the most important!!!
          - for node_exporter -> go to
-           - local [grafata](http://localhost:3001/dashboards)
+           - local [grafana](http://localhost:3001/dashboards)
            - click `new` button -> `import` button
              - into the `Find and import dashboards` field set id `1860` for [node_exporter](https://grafana.com/grafana/dashboards/1860-node-exporter-full/) dashboard
+             - click `Load` button
              - choose prometheus as database
              - click the `import` button
          - for postgres_exporter -> go to
-           - local [grafata](http://localhost:3001/dashboards)
+           - local [grafana](http://localhost:3001/dashboards)
            - click `new` button -> `import` button
                - into the `Find and import dashboards` field set id `9628` for [postgres_exporter](https://grafana.com/grafana/dashboards/9628-postgresql-database/) dashboard
+               - click `Load` button
                - choose prometheus as database
                - click the `import` button
        - **influx** 
        - standard username: `admin`, password: `admin`
          - for **JMeter** -> go to
-           - local [grafata](http://localhost:3001/dashboards)
+           - local [grafana](http://localhost:3001/dashboards)
            - click `new` button -> `import` button
              - into the `Find and import dashboards` field set id `5496` for [Apache JMeter](https://grafana.com/grafana/dashboards/5496-apache-jmeter-dashboard-by-ubikloadpack/) dashboard
+             - click `Load` button
              - choose influxDB as datasource
              - click the `import` button
 3. #### **prometheus**
+    - special config if your based system is `Windows`
+      - go to prometheus config file `monitoring/config/prometheus.yml`
+      - on the scrape config section you need to change each part of `job_name`
+        - targets: ['cadvisor:8081'] -> targets: ['localhost:8081']
+        - targets: ['node_exporter:9100'] -> targets: ['localhost:9100']
+        - targets: ['postgres_exporter:9187'] -> targets: ['localhost:9187']
+        - targets: ['backend:8080'] -> targets: ['localhost:8080']
     - INFO 
       - prometheus config file `monitoring/config/prometheus.yml`
       - prometheus node down alerting config `monitoring/config/node_down.yml`
