@@ -2,7 +2,7 @@
 this project was built for performance testing courses. don't judge strictly
 
 ## [infrastructure](#install-infrastructure)
-1. [java-17](#java)
+1. [java-11](#java)
 2. [maven](#maven)
 3. [docker](#docker)
 4. [jmeter-5.4.1](#jmeter)
@@ -26,7 +26,7 @@ git clone https://github.com/timofeevmd/service_reservation.git
 1. ### java
     1. #### **macOs**
        ```bash
-       brew install openjdk@17
+       brew install openjdk@11
        ```
         - Expected result
         ```bash
@@ -34,27 +34,27 @@ git clone https://github.com/timofeevmd/service_reservation.git
         ```
        Output
         ```bash
-        openjdk 17.0.14 2025-01-21
-        OpenJDK Runtime Environment Homebrew (build 17.0.14+8)
-        OpenJDK 64-Bit Server VM Homebrew (build 17.0.14+8, mixed mode)
+        openjdk 11.0.26 2025-01-21
+        OpenJDK Runtime Environment Homebrew (build 11.0.26+4)
+        OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+4, mixed mode)
        ```
    troubleshooting
     - if you had different java version, check the [link](https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-macos) for switch between your jdk's
     2. #### **linux**
         - [manual](https://www.digitalocean.com/community/tutorials/how-to-install-java-on-centos-and-fedora)
         - if manual is not work
-        - `wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk/17.0.14+8/openlogic-openjdk-17.0.14+8-linux-x64.tar.gz`
-        - if wget is not work try to download [OpenJDK 17](https://www.openlogic.com/openjdk-downloads) (select version 17, your OS and architecture)
+        - `wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-linux-x64.tar.gz`
+        - if wget is not work try to download [OpenJDK 11](https://www.openlogic.com/openjdk-downloads) (select version 11, your OS and architecture)
         ```bash
           sudo mkdir -p /opt/java &&
           cd /opt/java &&
-          sudo tar -xvzf ~/openlogic-openjdk-17.0.14+8-linux-x64.tar.gz &&
-          sudo mv openlogic-openjdk-17.0.14+8-linux-x64 java-17 &&
+          sudo tar -xvzf ~/openlogic-openjdk-11.0.26+4-linux-x64.tar.gz &&
+          sudo mv openlogic-openjdk-11.0.26+4-linux-x64 java-11 &&
           sudo vim /etc/profile.d/java.sh
           ```
         - set of them
         ```bash
-          export JAVA_HOME=/opt/java/java-17
+          export JAVA_HOME=/opt/java/java-11
           export PATH=$JAVA_HOME/bin:$PATH
           ```
         - `source /etc/profile.d/java.sh`
@@ -64,22 +64,22 @@ git clone https://github.com/timofeevmd/service_reservation.git
          ```
        Output
          ```bash
-         openjdk 17.0.14 2025-01-21
-         OpenJDK Runtime Environment Homebrew (build 17.0.14+8)
-         OpenJDK 64-Bit Server VM Homebrew (build 17.0.14+8, mixed mode)
+         openjdk 11.0.26 2025-01-21
+         OpenJDK Runtime Environment Homebrew (build 11.0.26+4)
+         OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+4, mixed mode)
          ```
        troubleshooting
         - if you had different java version, check the [link](https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-macos) for switch between your jdk's
 
     3. #### **windows**
-        - download [.zip](https://builds.openlogic.com/downloadJDK/openlogic-openjdk/17.0.14+8/openlogic-openjdk-17.0.14+8-windows-x64.zip) or [.msi](https://builds.openlogic.com/downloadJDK/openlogic-openjdk/17.0.14+8/openlogic-openjdk-17.0.14+8-windows-x64.msi) to use installation wizard
+        - download [.zip](https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-windows-x64.zip) or [.msi](https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-windows-x64.msi) to use installation wizard
         - Follow the installation wizard, choosing 'Set JAVA_HOME variable'
-        - Note the installation path (usually C:\Program Files\OpenLogic\jdk-17.0.14.8-hotspot\ or C:\Program Files\Java\jdk-17).
+        - Note the installation path (usually C:\Program Files\OpenLogic\jdk-11.0.26.4-hotspot\ or C:\Program Files\Java\jdk-11).
         - Open Control Panel → System → Advanced system settings.
         - Go to the Advanced tab and click Environment Variables.
         - Under System Variables
         - Find the `JAVA_HOME` variable (if it does not exist, click New)
-        - Set `JAVA_HOME=C:\Program Files\OpenLogic\jdk-17.0.14.8-hotspot\`
+        - Set `JAVA_HOME=C:\Program Files\OpenLogic\jdk-11.0.26.4-hotspot\`
         - Find Path → click Edit → New
         - Set `%JAVA_HOME%\bin`
 
@@ -89,9 +89,9 @@ git clone https://github.com/timofeevmd/service_reservation.git
         ```
        Output
         ```bash
-        openjdk 17.0.14 2025-01-21
-        OpenJDK Runtime Environment OpenLogic-OpenJDK (build 17.0.14+8-adhoc..jdk17u)
-        OpenJDK 64-Bit Server VM OpenLogic-OpenJDK (build 17.0.14+8-adhoc..jdk17u, mixed mode)
+        openjdk 11.0.26 2025-01-21
+        OpenJDK Runtime Environment OpenLogic-OpenJDK (build 11.0.26+4-adhoc..jdk11u)
+        OpenJDK 64-Bit Server VM OpenLogic-OpenJDK (build 11.0.26+4-adhoc..jdk11u, mixed mode)
        ```
        troubleshooting
         - if you had different java version, check the [link](https://stackoverflow.com/questions/26993101/switching-between-different-jdk-versions-in-windows) for switch between your jdk's
@@ -105,7 +105,7 @@ git clone https://github.com/timofeevmd/service_reservation.git
        ```bash
        Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
        Maven home: /opt/homebrew/Cellar/maven/3.9.9/libexec
-       Java version: 17.0.14, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home
+       Java version: 11.0.26, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home
        Default locale: en_US, platform encoding: UTF-8
        OS name: "mac os x", version: "15.3.2", arch: "aarch64", family: "mac"
        ```
