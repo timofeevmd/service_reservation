@@ -61,6 +61,8 @@ public class ReservationService {
     }
 
     public List<ReservationResponseDTO> getUserReservations(User user, int limit, int offset) {
+        if (limit < 1) limit = 15;
+        if (offset < 0) offset = 0;
         Pageable pageable = PageRequest.of(offset / limit, limit);
         return reservationRepository.findByUserWithPagination(user, pageable).stream()
                 .map(reservation -> {
@@ -100,6 +102,8 @@ public class ReservationService {
      * @return list of reservations
      */
     public List<Reservation> findByUserWithPagination(User user, int limit, int offset) {
+        if (limit < 1) limit = 15;
+        if (offset < 0) offset = 0;
         Pageable pageable = PageRequest.of(offset / limit, limit);
         return reservationRepository.findByUserWithPagination(user, pageable);
     }

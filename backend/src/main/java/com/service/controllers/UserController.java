@@ -80,7 +80,6 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(@RequestHeader("Authorization") String token) {
         return userFetchRequestTimer.record(() -> {
-            System.out.println("TOKEN" + token);
             if (token == null || !token.startsWith("Bearer ")) {
                 userFetchRequestsFailure.increment();
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -125,9 +124,9 @@ public class UserController {
         Optional<User> user = userService.findById(id);
         if (!user.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User with ID \" + id + \" not found");
+                    .body("User with ID " + id + " not found");
         }
         userService.deleteUser(id);
-        return ResponseEntity.ok("User with ID \" + id + \" successfully deleted");
+        return ResponseEntity.ok("User with ID " + id + " successfully deleted");
     }
 }
