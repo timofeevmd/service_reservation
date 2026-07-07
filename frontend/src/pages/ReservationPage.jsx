@@ -62,30 +62,17 @@ const ReservationPage = () => {
             type,
             startDate,
             endDate,
-            duration,
+            duration: Number(duration),
             status: "Active",
             userId: user.id,
-            itemId
+            itemId: Number(itemId)
         };
-    
+
         try {
-            const token = localStorage.getItem("auth_token");
-
-            const response = await api.post(`/reservations/create`, JSON.stringify(reservationData), {
-                headers: {
-                    "Content-Type": "application/json" ,
-                    "Authorization": `Bearer ${token}`,
-                }
-            })
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Reservation error: ${errorText}`);
-            }
-    
+            await api.post(`/reservations/create`, reservationData);
             navigate("/dashboard");
         } catch (err) {
-            setError(err.message);
+            setError(err.response?.data ? String(err.response.data) : err.message);
         }
     };
 

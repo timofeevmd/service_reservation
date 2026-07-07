@@ -21,7 +21,7 @@ const DashboardPage = () => {
 
         setLoading(true);
         try {
-            const response = await api.get(`/reservations/user?limit=10&offset=${pageRef.current * 15}`);
+            const response = await api.get(`/reservations/user?limit=10&offset=${pageRef.current * 10}`);
             if (response.data.length > 0) {
                 setReservations((prev) => [...prev, ...response.data]);
                 pageRef.current += 1;
@@ -45,17 +45,17 @@ const DashboardPage = () => {
     };
 
     const handleCancelReservation = async (id) => {
-        if (!window.confirm("Are you sure you want to cancel the reservation?")) return;
-        
+        if (!window.confirm("Are you sure you want to complete the reservation?")) return;
+
         try {
-            await api.delete(`/reservations/${id}`);
-            setReservations(reservations.map(reservation => 
+            await api.patch(`/reservations/${id}/complete`);
+            setReservations(reservations.map(reservation =>
                 reservation.id === id ? { ...reservation, status: "Completed" } : reservation
             ));
-            alert("Reservation canceled");
+            alert("Reservation completed");
         } catch (error) {
-            console.error("Error canceling reservation:", error);
-            alert("Failed to cancel reservation");
+            console.error("Error completing reservation:", error);
+            alert("Failed to complete reservation");
         }
     };
 

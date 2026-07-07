@@ -18,7 +18,7 @@ const RegisterPage = () => {
             await register(formData);
             navigate("/dashboard");
         } catch (err) {
-            setError(err.response?.data?.message || "Registration error");
+            setError(err.response?.data || "Registration error");
         }
     };
 

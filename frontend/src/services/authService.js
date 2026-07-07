@@ -1,19 +1,15 @@
 import api from "../api";
 
+const AUTH_STORAGE_KEY = import.meta.env.VITE_AUTH_STORAGE_KEY || "auth_token";
+
 export const register = async (userData) => {
     try {
-        
-        const formattedData = {
+        const response = await api.post("/auth/register", {
             username: userData.name,
-            email: userData.email,
-            password: userData.password
-        };
-
-        const response = await api.post("/api/auth/register", JSON.stringify(formattedData), {
-            headers: { "Content-Type": "application/json" }
+            password: userData.password,
         });
 
-        localStorage.setItem("auth_token", response.data.token);
+        localStorage.setItem(AUTH_STORAGE_KEY, response.data.token);
 
         return response.data;
     } catch (err) {
@@ -23,31 +19,24 @@ export const register = async (userData) => {
 };
 
 export const login = async (username, password) => {
-    try {
-        const response = await fetch(`/api/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-            credentials: "include",
-        });
+    const response = await fetch(`/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+        credentials: "include",
+    });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Error ${response.status}: ${errorText}`);
-        }
-
-        const data = await response.json();
-
-        localStorage.setItem("auth_token", data.token);
-        return response;
-
-    } catch (err) {
-        console.error("❌ Full login error:", err);
-        console.error("❌ Error message:", err.message);
-        console.error("❌ Stack Trace:", err.stack);
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error ${response.status}: ${errorText}`);
     }
-};  
+
+    const data = await response.json();
+
+    localStorage.setItem(AUTH_STORAGE_KEY, data.token);
+    return data;
+};
 
 export const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem(AUTH_STORAGE_KEY);
 };
