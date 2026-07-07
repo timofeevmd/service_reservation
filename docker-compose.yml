@@ -1,5 +1,3 @@
-version: '3.8'
-
 networks:
     monitor:
         driver: bridge
@@ -70,7 +68,7 @@ services:
       resources:
         limits:
           cpus: "0.3"
-          memory: "512g"
+          memory: "512m"
         reservations:
           cpus: "0.2"
           memory: "256m"
@@ -84,7 +82,7 @@ services:
       - ${NETWORKS}
 
   database:
-    image: postgres:latest
+    image: postgres:16
     container_name: database
     restart: always
     deploy:
