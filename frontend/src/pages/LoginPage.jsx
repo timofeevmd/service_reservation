@@ -14,16 +14,8 @@ function LoginPage() {
         setError(null); 
     
         try {
-            const response = await login(identifier, password);
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.log("Error data:", errorData);
-                throw new Error(errorData.error || "Authorization error");
-            }
-            const data = response.headers.get("content-length") > 0 ? await response.json() : {};
-            localStorage.setItem("token", data.token || "");    
+            await login(identifier, password);
             navigate("/dashboard");
-    
         } catch (err) {
             setError(err.message);
         }

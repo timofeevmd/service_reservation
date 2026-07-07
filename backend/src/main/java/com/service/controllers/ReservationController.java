@@ -32,6 +32,10 @@ public class ReservationController {
     private final Counter createdReservationsFailure;
     private final Counter deletedReservations;
     private final Counter deletedReservationsFailure;
+    private final Counter fetchedUserReservations;
+    private final Counter fetchedUserReservationsFailure;
+    private final Counter completedReservations;
+    private final Counter completedReservationsFailure;
     private final Timer reservationRequestTimer;
     private final Timer userReservationsRequestTimer;
 
@@ -45,6 +49,10 @@ public class ReservationController {
         this.createdReservationsFailure = meterRegistry.counter("reservations.created.count.failure");
         this.deletedReservations = meterRegistry.counter("reservations.deleted.count");
         this.deletedReservationsFailure = meterRegistry.counter("reservations.deleted.count.failure");
+        this.fetchedUserReservations = meterRegistry.counter("reservations.user.fetched.count");
+        this.fetchedUserReservationsFailure = meterRegistry.counter("reservations.user.fetched.count.failure");
+        this.completedReservations = meterRegistry.counter("reservations.completed.count");
+        this.completedReservationsFailure = meterRegistry.counter("reservations.completed.count.failure");
         this.reservationRequestTimer = meterRegistry.timer("reservations.request.time");
         this.userReservationsRequestTimer = meterRegistry.timer("reservations.user.request.time");
     }
@@ -84,14 +92,14 @@ public class ReservationController {
                 String username = jwtTokenProvider.getUsernameFromToken(token.replace("Bearer ", ""));
                 Optional<User> userOpt = userService.findByUsername(username);
                 if (userOpt.isEmpty()) {
-                    createdReservationsFailure.increment();
+                    fetchedUserReservationsFailure.increment();
                     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
                 }
-                createdReservations.increment();
+                fetchedUserReservations.increment();
                 List<ReservationResponseDTO> reservations = reservationService.getUserReservations(userOpt.get(), limit, offset);
                 return new ResponseEntity<>(reservations, HttpStatus.OK);
             } catch (Exception e) {
-                createdReservationsFailure.increment();
+                fetchedUserReservationsFailure.increment();
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error loading reservations: " + e.getMessage());
             }
         });
@@ -129,11 +137,30 @@ public class ReservationController {
             Optional<Reservation> reservation = reservationService.findById(id);
             if (!reservation.isPresent()) {
                 deletedReservationsFailure.increment();
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservation with ID \" + id + \" not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservation with ID " + id + " not found");
             }
             reservationService.deleteReservation(id);
             deletedReservations.increment();
-            return ResponseEntity.ok("Reservation with ID \" + id + \" successfully deleted");
+            return ResponseEntity.ok("Reservation with ID " + id + " successfully deleted");
+        });
+    }
+
+    /**
+     * Complete a reservation (sets status to "Completed").
+     *
+     * @param id Reservation ID
+     * @return Operation status
+     */
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<?> completeReservation(@PathVariable Long id) {
+        return reservationRequestTimer.record(() -> {
+            Optional<Reservation> updated = reservationService.completeReservation(id);
+            if (updated.isEmpty()) {
+                completedReservationsFailure.increment();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reservation with ID " + id + " not found");
+            }
+            completedReservations.increment();
+            return ResponseEntity.ok("Reservation with ID " + id + " successfully completed");
         });
     }
 

@@ -36,28 +36,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
-        System.out.println("Processing request: " + requestURI);
-        System.out.println("Incoming token: " + request.getHeader("Authorization"));
 
         if (requestURI.startsWith("/actuator")) {
-            System.out.println("Skipping prometheus authentication for: " + requestURI);
             filterChain.doFilter(request, response);
             return;
         }
 
         if (requestURI.startsWith("/api/auth/")) {
-            System.out.println("Skipping authentication for: " + requestURI);
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = getJwtFromRequest(request);
-        System.out.println("Validating token: " + token);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String username = jwtTokenProvider.getUsernameFromToken(token);
-            String sessionId = jwtTokenProvider.getSessionIdFromToken(token);
-            System.out.println("Token validated for user: " + username + " (Session ID: " + sessionId + ")");
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

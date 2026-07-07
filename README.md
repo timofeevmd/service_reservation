@@ -1,8 +1,8 @@
 # service_reservation
-this project was build for performance testing courses.  don't judge strictly
+this project was built for performance testing courses. don't judge strictly
 
 ## [infrastructure](#install-infrastructure)
-1. [java-17](#java)
+1. [java-11](#java)
 2. [maven](#maven)
 3. [docker](#docker)
 4. [jmeter-5.4.1](#jmeter)
@@ -35,16 +35,16 @@ git clone https://github.com/timofeevmd/service_reservation.git
        Output
         ```bash
         openjdk 11.0.26 2025-01-21
-        OpenJDK Runtime Environment Homebrew (build 11.0.26+0)
-        OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+0, mixed mode)
+        OpenJDK Runtime Environment Homebrew (build 11.0.26+4)
+        OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+4, mixed mode)
        ```
    troubleshooting
     - if you had different java version, check the [link](https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-macos) for switch between your jdk's
     2. #### **linux**
         - [manual](https://www.digitalocean.com/community/tutorials/how-to-install-java-on-centos-and-fedora)
         - if manual is not work
-        - `wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-linux-64.tar.gz`
-        - if wget is not work try to download [openjdk-11-...](https://builds.openlogic.com/openjdk-downloads?field_java_parent_version_target_id=406&field_operating_system_target_id=426&field_architecture_target_id=391&field_java_package_target_id=396)
+        - `wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk/11.0.26+4/openlogic-openjdk-11.0.26+4-linux-x64.tar.gz`
+        - if wget is not work try to download [OpenJDK 11](https://www.openlogic.com/openjdk-downloads) (select version 11, your OS and architecture)
         ```bash
           sudo mkdir -p /opt/java &&
           cd /opt/java &&
@@ -65,8 +65,8 @@ git clone https://github.com/timofeevmd/service_reservation.git
        Output
          ```bash
          openjdk 11.0.26 2025-01-21
-         OpenJDK Runtime Environment Homebrew (build 11.0.26+0)
-         OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+0, mixed mode)
+         OpenJDK Runtime Environment Homebrew (build 11.0.26+4)
+         OpenJDK 64-Bit Server VM Homebrew (build 11.0.26+4, mixed mode)
          ```
        troubleshooting
         - if you had different java version, check the [link](https://stackoverflow.com/questions/21964709/how-to-set-or-change-the-default-java-jdk-version-on-macos) for switch between your jdk's
@@ -105,7 +105,7 @@ git clone https://github.com/timofeevmd/service_reservation.git
        ```bash
        Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
        Maven home: /opt/homebrew/Cellar/maven/3.9.9/libexec
-       Java version: 11.0.19, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home
+       Java version: 11.0.26, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/jdk-11.jdk/Contents/Home
        Default locale: en_US, platform encoding: UTF-8
        OS name: "mac os x", version: "15.3.2", arch: "aarch64", family: "mac"
        ```
@@ -167,6 +167,11 @@ git clone https://github.com/timofeevmd/service_reservation.git
       ```bash
        docker-compose -f docker-compose.yml up -d 
       ```
+   - to build the images from source instead of pulling them from Docker Hub, use the local compose file
+      ```bash
+      docker-compose -f docker-compose.local.yml up -d --build
+      ```
+   - the course documentation site (VitePress) is available at http://localhost:5173
    - check current state
      ```bash
      docker ps -a
@@ -174,14 +179,16 @@ git clone https://github.com/timofeevmd/service_reservation.git
    - expected result
      ```bash
      CONTAINER ID   IMAGE                                     COMMAND                  CREATED      STATUS                      PORTS                                            NAMES
-     8472204b071f   influxdb:1.8                              "/entrypoint.sh infl…"   2 days ago   Up 22 minutes               0.0.0.0:8083->8083/tcp, 0.0.0.0:8086->8086/tcp   influxdb
-     5516036bb73b   michaelt1223/perf_sr_frontend:latest      "/docker-entrypoint.…"   5 days ago   Up 22 minutes               80/tcp, 0.0.0.0:3000->3000/tcp                   frontend
+     8472204b071f   influxdb:1.8                              "/entrypoint.sh infl…"   2 days ago   Up 22 minutes               0.0.0.0:8086->8086/tcp                           influxdb
+     5516036bb73b   michaelt1223/perf_sr_frontend:latest      "/docker-entrypoint.…"   5 days ago   Up 22 minutes               0.0.0.0:80->80/tcp                               frontend
      7fde5b402724   michaelt1223/perf_sr_backend:latest       "java -jar app.jar"      5 days ago   Up 22 minutes               0.0.0.0:8080->8080/tcp                           backend
      f08d6be43900   postgres:latest                           "docker-entrypoint.s…"   5 days ago   Up 22 minutes (healthy)     0.0.0.0:5432->5432/tcp                           database
      de5d1b1f9e26   prom/prometheus:latest                    "/bin/prometheus --c…"   5 days ago   Up 22 minutes               0.0.0.0:9091->9090/tcp                           prometheus
      28fd29a8499a   grafana/grafana:latest                    "/run.sh"                5 days ago   Up 22 minutes               0.0.0.0:3001->3000/tcp                           grafana
      7e25219f1688   quay.io/prometheus/node-exporter:latest   "/bin/node_exporter"     5 days ago   Up 22 minutes               0.0.0.0:9100->9100/tcp                           node_exporter
      aee27e4ea7b1   gcr.io/cadvisor/cadvisor:latest           "/usr/bin/cadvisor -…"   5 days ago   Up 22 minutes (unhealthy)   8080/tcp, 0.0.0.0:8081->8081/tcp                 cadvisor
+     9b1c2d3e4f5a   prometheuscommunity/postgres-exporter     "/bin/postgres_expor…"   5 days ago   Up 22 minutes               0.0.0.0:9187->9187/tcp                           postgres_exporter
+     0c2d3e4f5a6b   service_reservation-documentation         "docker-entrypoint.s…"   5 days ago   Up 22 minutes               0.0.0.0:5173->5173/tcp                           documentation
      ```
    
 2. #### **grafana**
